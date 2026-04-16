@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="mn">
 <head>
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Хятад Кино">
+<meta name="theme-color" content="#e63946">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Шинээгийн Хятад Кино</title>
@@ -209,6 +216,41 @@ function openModal(t,m,d){document.getElementById('modal-title').textContent=t;d
 function closeModal(e){if(e.target.id==='modal')document.getElementById('modal').classList.remove('open')}
 function closeModalBtn(){document.getElementById('modal').classList.remove('open')}
 function setFilter(b){document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active')}
+</script>
+
+<div id="ios-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#1a1a2e;border-top:1px solid #e63946;padding:14px 16px;flex-direction:column;gap:8px">
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="/icon-192.png" style="width:44px;height:44px;border-radius:10px">
+      <div>
+        <div style="color:white;font-weight:600;font-size:14px">Шинээгийн Хятад Кино</div>
+        <div style="color:#8b949e;font-size:12px">Утасдаа суулгах</div>
+      </div>
+    </div>
+    <button onclick="document.getElementById('ios-banner').style.display='none'" style="background:transparent;border:none;color:#8b949e;font-size:20px;cursor:pointer">✕</button>
+  </div>
+  <div style="background:#0d1117;border-radius:8px;padding:10px 12px;color:#e6edf3;font-size:13px;line-height:1.6">
+    📱 <b>iPhone-д суулгах:</b><br>
+    1. Safari-н доод хэсэгт <b>□↑ Share</b> товч дарна<br>
+    2. <b>"Add to Home Screen"</b> сонгоно<br>
+    3. <b>"Add"</b> дарна — дууслаа! 🎉
+  </div>
+</div>
+<script>
+(function(){
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.navigator.standalone;
+  const dismissed = localStorage.getItem('ios-banner-dismissed');
+  if(isIOS && !isStandalone && !dismissed) {
+    setTimeout(function(){
+      document.getElementById('ios-banner').style.display='flex';
+    }, 2000);
+  }
+  window.dismissIOSBanner = function(){
+    document.getElementById('ios-banner').style.display='none';
+    localStorage.setItem('ios-banner-dismissed','1');
+  };
+})();
 </script>
 </body>
 </html>
