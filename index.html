@@ -140,6 +140,19 @@ footer{margin-top:40px;border-top:1px solid var(--border);padding:24px;text-alig
 <div class="section">
   <div class="section-header"><span class="section-title">🔥 Хамгийн их үзсэн</span><span class="see-all">Бүгдийг харах →</span></div>
   <div class="movie-grid">
+    <div class="movie-card" 
+    <div class="movie-card" onclick="playVideo('639136','7cfcd376-73bd-4028-b8f8-1b8f17622c36','Overdo - Zhang Ling He')">
+      <div class="card-poster" style="background:linear-gradient(135deg,#1a0a2e,#4a1942);position:relative">
+        <img src="https://vz-639136.b-cdn.net/7cfcd376-73bd-4028-b8f8-1b8f17622c36/thumbnail.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
+        <span style="position:relative;z-index:1;font-size:48px">🎬</span>
+        <div class="card-overlay"><div class="play-circle">▶</div></div>
+        <span class="card-badge badge-new">Шинэ</span>
+      </div>
+      <div class="card-info">
+        <div class="card-title">Overdo - Zhang Ling He</div>
+        <div class="card-meta"><span class="card-rating">★★★★☆ 8.5</span><span class="card-viewers">👁 0</span></div>
+      </div>
+    </div>
     <div class="movie-card" onclick="openModal('Хаан Чингис','2023 · Түүхэн · ⭐ 9.1','Монгол дэлхийг эзлэн авсан Чингис хааны амьдрал.')"><div class="card-poster p1"><span>🐉</span><div class="card-overlay"><div class="play-circle">▶</div></div><span class="card-badge badge-vip">⭐ VIP</span><span class="card-ep">24 анги</span></div><div class="card-info"><div class="card-title">Хаан Чингис</div><div class="card-meta"><span class="card-rating">★★★★★ 9.1</span><span class="card-viewers">👁 362</span></div></div></div>
     <div class="movie-card" onclick="openModal('Зүрхний дуу','2025 · Романтик · ⭐ 9.2','Хоёр ертөнцийн хил дээр уулзсан хайр дурлалын тухай цуврал.')"><div class="card-poster p9"><span>❤️</span><div class="card-overlay"><div class="play-circle">▶</div></div><span class="card-badge badge-new">Шинэ</span><span class="card-ep">32 анги</span></div><div class="card-info"><div class="card-title">Зүрхний дуу</div><div class="card-meta"><span class="card-rating">★★★★★ 9.2</span><span class="card-viewers">👁 312</span></div></div></div>
     <div class="movie-card" onclick="openModal('Бүргэдийн нисэлт','2025 · Баримтат · ⭐ 9.0','Монгол Алтайн бүргэдчин болон түүний бүргэдийн тухай баримтат.')"><div class="card-poster p2"><span>🦅</span><div class="card-overlay"><div class="play-circle">▶</div></div><span class="card-badge badge-hd">4K</span></div><div class="card-info"><div class="card-title">Бүргэдийн нисэлт</div><div class="card-meta"><span class="card-rating">★★★★★ 9.0</span><span class="card-viewers">👁 198</span></div></div></div>
@@ -160,6 +173,16 @@ footer{margin-top:40px;border-top:1px solid var(--border);padding:24px;text-alig
     <div class="movie-card" onclick="openModal('Шөнийн нүүдэл','2023 · Аймшгийн · ⭐ 7.5','Харанхуй шөнийн зугталтын тухай аймаар цуврал.')"><div class="card-poster p4"><span>🌙</span><div class="card-overlay"><div class="play-circle">▶</div></div></div><div class="card-info"><div class="card-title">Шөнийн нүүдэл</div><div class="card-meta"><span class="card-rating">★★★★☆ 7.5</span></div></div></div>
   </div>
 </div>
+
+<div class="section" id="video-player-section" style="display:none">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <span class="section-title" id="player-title">🎬 Одоо үзэж байна</span>
+    <button onclick="closePlayer()" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 16px;border-radius:6px;cursor:pointer;font-size:13px">✕ Хаах</button>
+  </div>
+  <div style="position:relative;padding-top:56.25%;border-radius:10px;overflow:hidden">
+    <iframe id="bunny-player" src="" loading="lazy" style="border:none;position:absolute;top:0;left:0;width:100%;height:100%;" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen></iframe>
+  </div>
+</div>
 <footer><p style="margin-bottom:8px">🎬 МонголДрама · Бүх эрх хуулиар хамгаалагдсан © 2025</p><p>Зохиогчийн эрхгүй контент · Монголоор субтитртэй</p></footer>
 <div class="modal-bg" id="modal" onclick="closeModal(event)">
   <div class="modal">
@@ -171,6 +194,17 @@ footer{margin-top:40px;border-top:1px solid var(--border);padding:24px;text-alig
   </div>
 </div>
 <script>
+
+function playVideo(libId, videoId, title) {
+  document.getElementById('video-player-section').style.display = 'block';
+  document.getElementById('player-title').textContent = '🎬 ' + title;
+  document.getElementById('bunny-player').src = 'https://iframe.mediadelivery.net/embed/' + libId + '/' + videoId + '?autoplay=true';
+  document.getElementById('video-player-section').scrollIntoView({behavior:'smooth'});
+}
+function closePlayer() {
+  document.getElementById('video-player-section').style.display = 'none';
+  document.getElementById('bunny-player').src = '';
+}
 function openModal(t,m,d){document.getElementById('modal-title').textContent=t;document.getElementById('modal-meta').textContent=m;document.getElementById('modal-desc').textContent=d;document.getElementById('modal').classList.add('open')}
 function closeModal(e){if(e.target.id==='modal')document.getElementById('modal').classList.remove('open')}
 function closeModalBtn(){document.getElementById('modal').classList.remove('open')}
