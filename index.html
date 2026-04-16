@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>МонголДрама - Хятад Кино</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--accent:#e63946;--gold:#f4a261;--text:#e6edf3;--text2:#8b949e;--border:#30363d}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;min-height:100vh}
+a{text-decoration:none;color:inherit}
+nav{position:sticky;top:0;z-index:100;background:rgba(13,17,23,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:24px;height:60px}
+.logo{font-size:22px;font-weight:700;color:var(--accent);letter-spacing:-1px;white-space:nowrap}
+.logo span{color:var(--text)}
+.nav-links{display:flex;gap:4px;flex:1}
+.nav-links a{padding:6px 14px;border-radius:6px;font-size:14px;color:var(--text2);transition:.15s}
+.nav-links a:hover,.nav-links a.active{background:var(--bg3);color:var(--text)}
+.nav-right{display:flex;align-items:center;gap:10px;margin-left:auto}
+.search{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:7px 14px}
+.search input{background:transparent;border:none;outline:none;color:var(--text);font-size:14px;width:180px}
+.search input::placeholder{color:var(--text2)}
+.btn-login{padding:7px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);font-size:14px;cursor:pointer}
+.btn-vip{padding:7px 18px;border-radius:8px;background:var(--accent);color:white;font-size:14px;font-weight:600;border:none;cursor:pointer}
+.ticker{background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 24px;display:flex;align-items:center;gap:12px;overflow:hidden}
+.ticker-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.ticker-label{font-size:12px;color:#22c55e;font-weight:600;white-space:nowrap}
+.ticker-text{font-size:13px;color:var(--text2);white-space:nowrap;animation:marquee 30s linear infinite}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.hero{position:relative;height:420px;overflow:hidden;display:flex;align-items:flex-end}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0d1117 0%,#1a0a2e 40%,#2d1b4e 100%)}
+.hero-poster{position:absolute;right:0;top:0;width:55%;height:100%;background:linear-gradient(135deg,#2d1b4e,#4a1942,#6b2d6b);display:flex;align-items:center;justify-content:center;font-size:120px}
+.hero-overlay{position:absolute;right:0;top:0;width:55%;height:100%;background:linear-gradient(to right,#0d1117 0%,transparent 40%)}
+.hero-content{position:relative;z-index:2;padding:0 40px 40px;max-width:540px}
+.hero-badge{display:inline-flex;background:var(--accent);color:white;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;margin-bottom:12px}
+.hero-title{font-size:32px;font-weight:700;line-height:1.2;margin-bottom:8px}
+.hero-meta{font-size:13px;color:var(--text2);margin-bottom:8px}
+.hero-desc{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:20px}
+.hero-btns{display:flex;gap:10px}
+.btn-play{background:var(--accent);color:white;border:none;padding:12px 28px;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer}
+.btn-save{background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);padding:12px 20px;border-radius:8px;font-size:15px;cursor:pointer}
+.filters{padding:16px 24px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border)}
+.filter-btn{padding:7px 18px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:13px;white-space:nowrap;cursor:pointer;transition:.15s}
+.filter-btn.active{background:var(--accent);border-color:var(--accent);color:white}
+.section{padding:28px 24px 8px}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-title{font-size:17px;font-weight:600}
+.see-all{font-size:13px;color:var(--accent);cursor:pointer}
+.movie-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;padding-bottom:24px}
+.movie-card{border-radius:10px;overflow:hidden;background:var(--bg2);border:1px solid var(--border);cursor:pointer;transition:.2s;position:relative}
+.movie-card:hover{transform:translateY(-4px);border-color:var(--accent)}
+.movie-card:hover .card-overlay{opacity:1}
+.card-poster{height:260px;display:flex;align-items:center;justify-content:center;font-size:64px;position:relative}
+.card-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;opacity:0;transition:.2s}
+.play-circle{width:52px;height:52px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:20px;color:white}
+.card-badge{position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.badge-new{background:#22c55e;color:white}
+.badge-vip{background:#f4a261;color:#1a0a00}
+.badge-hd{background:rgba(0,0,0,0.7);color:white;border:1px solid rgba(255,255,255,0.2)}
+.card-ep{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.8);color:var(--text2);font-size:11px;padding:3px 8px;border-radius:4px}
+.card-info{padding:12px}
+.card-title{font-size:14px;font-weight:500;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-meta{font-size:12px;color:var(--text2);display:flex;align-items:center;justify-content:space-between}
+.card-rating{color:#f4a261}
+.card-viewers{color:#22c55e;font-size:11px}
+.banner{margin:0 24px 8px;border-radius:12px;background:linear-gradient(135deg,#1a0a2e,#2d1b4e);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(230,57,70,0.3)}
+.banner-text h3{font-size:18px;font-weight:600;margin-bottom:4px}
+.banner-text p{font-size:13px;color:var(--text2)}
+.banner-btn{background:var(--accent);color:white;border:none;padding:10px 22px;border-radius:8px;font-weight:600;cursor:pointer;white-space:nowrap}
+footer{margin-top:40px;border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--text2);font-size:13px}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.2s}
+.modal-bg.open{opacity:1;pointer-events:all}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;width:90%;max-width:520px;padding:28px;position:relative}
+.modal-close{position:absolute;top:16px;right:16px;background:var(--bg3);border:none;color:var(--text);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px}
+.modal h2{font-size:22px;margin-bottom:6px}
+.modal-meta{font-size:13px;color:var(--text2);margin-bottom:16px}
+.modal-desc{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:20px}
+.modal-btns{display:flex;gap:10px}
+.p1{background:linear-gradient(135deg,#0f3460,#533483)}
+.p2{background:linear-gradient(135deg,#1a472a,#2d6a4f)}
+.p3{background:linear-gradient(135deg,#7b2d00,#c44b00)}
+.p4{background:linear-gradient(135deg,#1a1a2e,#4a4a8a)}
+.p5{background:linear-gradient(135deg,#2d1b00,#8b4513)}
+.p6{background:linear-gradient(135deg,#0d1b2a,#1b4f72)}
+.p7{background:linear-gradient(135deg,#1a0033,#6600cc)}
+.p8{background:linear-gradient(135deg,#003300,#006600)}
+.p9{background:linear-gradient(135deg,#330000,#990000)}
+.p10{background:linear-gradient(135deg,#001a33,#004080)}
+.p11{background:linear-gradient(135deg,#2d0033,#990099)}
+.p12{background:linear-gradient(135deg,#1a1a00,#666600)}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">🎬 <span>Монгол</span>Драма</div>
+  <div class="nav-links">
+    <a href="#" class="active">Нүүр</a>
+    <a href="#">Кино</a>
+    <a href="#">Цуврал</a>
+    <a href="#">Хятад</a>
+    <a href="#">Солонгос</a>
+    <a href="#">Монгол</a>
+    <a href="#">Шинэ</a>
+  </div>
+  <div class="nav-right">
+    <div class="search"><input type="text" placeholder="Кино хайх..."></div>
+    <button class="btn-login">Нэвтрэх</button>
+    <button class="btn-vip">⭐ VIP</button>
+  </div>
+</nav>
+<div class="ticker">
+  <div class="ticker-dot"></div>
+  <span class="ticker-label">ЯГ ОДОО</span>
+  <div class="ticker-text">👁 3,513 хэрэглэгч үзэж байна &nbsp;·&nbsp; 🔥 Хаан ба Тогтмол 428 хүн үзэж байна &nbsp;·&nbsp; ❤️ Зүрхний дуу 312 хүн үзэж байна &nbsp;·&nbsp; ⭐ Мөнгөн харгуй 255 хүн үзэж байна &nbsp;·&nbsp; 👁 3,513 хэрэглэгч үзэж байна &nbsp;·&nbsp; 🔥 Хаан ба Тогтмол 428 хүн үзэж байна</div>
+</div>
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-poster">👑</div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🔥 Шинэ · Онцлох</div>
+    <div class="hero-title">Хаан ба Тогтмол</div>
+    <div class="hero-meta">2025 · ⭐ 9.2 · 🕐 2ц 34м · 36 анги</div>
+    <div class="hero-desc">Эртний Хятадын хааны ордонд болсон хайр дурлал, эрх мэдлийн тэмцэл, баатарлаг тулааны тухай гайхамшигт тууль.</div>
+    <div class="hero-btns">
+      <button class="btn-play" onclick="openModal('Хаан ба Тогтмол','2025 · 36 анги · ⭐ 9.2','Эртний Хятадын хааны ордонд болсон хайр дурлал, эрх мэдлийн тэмцэл, баатарлаг тулааны тухай гайхамшигт тууль.')">▶ Одоо үзэх</button>
+      <button class="btn-save">♡ Хадгалах</button>
+    </div>
+  </div>
+</div>
+<div class="filters">
+  <button class="filter-btn active" onclick="setFilter(this)">Бүгд</button>
+  <button class="filter-btn" onclick="setFilter(this)">Романтик</button>
+  <button class="filter-btn" onclick="setFilter(this)">Үйлдлийн</button>
+  <button class="filter-btn" onclick="setFilter(this)">Түүхэн</button>
+  <button class="filter-btn" onclick="setFilter(this)">Инээдмийн</button>
+  <button class="filter-btn" onclick="setFilter(this)">Аймшгийн</button>
+  <button class="filter-btn" onclick="setFilter(this)">Монгол</button>
+</div>
+<div class="section">
+  <div class="section-header"><span class="section-title">🔥 Хамгийн их үзсэн</span><span class="see-all">Бүгдийг харах →</span></div>
+  <div class="movie-grid">
+    <div class="movie-card" onclick="openModal('Хаан Чингис','2023 · Түүхэн · ⭐ 9.1','Монгол дэлхийг эзлэн авсан Чингис хааны амьдрал.')"><div class="card-poster p1"><span>🐉</span><div class="card-overlay"><div class="play-circle">▶</div></div><span class="card-badge badge-vip">⭐ VIP</span><span class="card-ep">24 анги</span></div><div class="card-info"><div class="card-title">Хаан Чингис</div><div class="card-meta"><span class="card-rating">★★★★★ 9.1</span><span class="card-viewers">👁 362</span></div></div></div>
+    <div class="movie-card" onclick="openModal('Зүрхний дуу','2025 · Романтик · ⭐ 9.2','Хоёр ертөнцийн хил дээр уулзсан хайр дурлалын тухай цуврал.')"><div class="card-poster p9"><span>❤️</span><div class="card-overlay"><div class="play-circle">▶</div></div><span class="card-badge badge-new">Шинэ</span><span class="card-ep">32 анги</span></div><div class="card-info"><div class="card-title">Зүрхний дуу</div><div class="card-meta"><span class="card-rating">★★★★★ 9.2</span><span class="card-viewers">👁 312</span></div></div></div>
+    <div class="movie-card" onclick="openModal('Бүргэдийн нисэлт','2025 · Баримтат · ⭐ 9.0','Монгол Алтайн бүргэдчин болон түүний бүргэдийн тухай баримтат.')"><div class="card-poster p2"><span>🦅</span><div class="card-overlay"><div class="play-circle">▶</div></div><span class="card-badge badge-hd">4K</span></div><div class="card-info"><div class="card-title">Бүргэдийн нисэлт</div><div class="card-meta"><span class="card-rating">★★★★★ 9.0</span><span class="card-viewers">👁 198</span></div></div></div>
+    <div class="movie-card" onclick="openModal('Мөнгөн харгуй','2025 · Шинжлэх ухаан · ⭐ 8.6','Ирээдүйн дэлхийд тохиолдсон онгон баатрын аялал.')"><div class="card-poster p7"><span>✨</span><div class="card-overlay"><div class="play-circle">▶</div></div><span class="card-badge badge-new">Шинэ</span><span class="card-ep">20 анги</span></div><div class="card-info"><div class="card-title">Мөнгөн харгуй</div><div class="card-meta"><span class="card-rating">★★★★☆ 8.6</span><span class="card-viewers">👁 255</span></div></div></div>
+    <div class="movie-card" onclick="openModal('Тал нутгийн дуу','2024 · Романтик · ⭐ 8.3','Монгол тал нутгийн гоо үзэсгэлэн дунд ургасан хайр дурлалын тухай.')"><div class="card-poster p8"><span>🌿</span><div class="card-overlay"><div class="play-circle">▶</div></div><span class="card-badge badge-hd">HD</span><span class="card-ep">18 анги</span></div><div class="card-info"><div class="card-title">Тал нутгийн дуу</div><div class="card-meta"><span class="card-rating">★★★★☆ 8.3</span></div></div></div>
+    <div class="movie-card" onclick="openModal('Аянгат шөнө','2025 · Үйлдлийн · ⭐ 7.7','Хотын харанхуйд болсон тулааны тухай цуврал.')"><div class="card-poster p10"><span>⚡</span><div class="card-overlay"><div class="play-circle">▶</div></div><span class="card-badge badge-vip">⭐ VIP</span><span class="card-ep">28 анги</span></div><div class="card-info"><div class="card-title">Аянгат шөнө</div><div class="card-meta"><span class="card-rating">★★★★☆ 7.7</span></div></div></div>
+  </div>
+</div>
+<div class="banner"><div class="banner-text"><h3>⭐ VIP гишүүнчлэл авах</h3><p>Бүх кино, цувралыг хязгааргүй HD чанартай үзэх</p></div><button class="banner-btn">30 хоног — $4.99</button></div>
+<div class="section">
+  <div class="section-header"><span class="section-title">✨ Шинээр нэмэгдсэн</span><span class="see-all">Бүгдийг харах →</span></div>
+  <div class="movie-grid">
+    <div class="movie-card" onclick="openModal('Далайн аялал','2025 · Адал явдал · ⭐ 8.0','Далай тэнгисийн давалгааны дунд болсон эрэлхийллийн тухай цуврал.')"><div class="card-poster p6"><span>🌊</span><div class="card-overlay"><div class="play-circle">▶</div></div><span class="card-badge badge-new">Шинэ</span><span class="card-ep">22 анги</span></div><div class="card-info"><div class="card-title">Далайн аялал</div><div class="card-meta"><span class="card-rating">★★★★☆ 8.0</span></div></div></div>
+    <div class="movie-card" onclick="openModal('Зэрлэг цэцэг','2025 · Романтик · ⭐ 9.2','Бага насны найзуудаас хайрт болсон хоёрын хайрын тухай.')"><div class="card-poster p11"><span>🌸</span><div class="card-overlay"><div class="play-circle">▶</div></div><span class="card-badge badge-new">Шинэ</span><span class="card-ep">40 анги</span></div><div class="card-info"><div class="card-title">Зэрлэг цэцэг</div><div class="card-meta"><span class="card-rating">★★★★★ 9.2</span><span class="card-viewers">👁 128</span></div></div></div>
+    <div class="movie-card" onclick="openModal('Ойн нууц','2024 · Аймшгийн · ⭐ 6.9','Нууцлаг ойд болсон аймаар үйл явдлын тухай.')"><div class="card-poster p5"><span>🌲</span><div class="card-overlay"><div class="play-circle">▶</div></div><span class="card-badge badge-hd">HD</span></div><div class="card-info"><div class="card-title">Ойн нууц</div><div class="card-meta"><span class="card-rating">★★★☆☆ 6.9</span></div></div></div>
+    <div class="movie-card" onclick="openModal('Гал дунд','2024 · Үйлдлийн · ⭐ 7.8','Хотын гудамжинд болсон тулааны тухай кино.')"><div class="card-poster p3"><span>🔥</span><div class="card-overlay"><div class="play-circle">▶</div></div><span class="card-badge badge-vip">⭐ VIP</span><span class="card-ep">16 анги</span></div><div class="card-info"><div class="card-title">Гал дунд</div><div class="card-meta"><span class="card-rating">★★★★☆ 7.8</span></div></div></div>
+    <div class="movie-card" onclick="openModal('Алтан харгуй','2024 · Түүхэн · ⭐ 8.4','Алтан замын дагуу явсан аялагчдын тухай баримтат.')"><div class="card-poster p12"><span>🏺</span><div class="card-overlay"><div class="play-circle">▶</div></div><span class="card-badge badge-hd">HD</span></div><div class="card-info"><div class="card-title">Алтан харгуй</div><div class="card-meta"><span class="card-rating">★★★★☆ 8.4</span></div></div></div>
+    <div class="movie-card" onclick="openModal('Шөнийн нүүдэл','2023 · Аймшгийн · ⭐ 7.5','Харанхуй шөнийн зугталтын тухай аймаар цуврал.')"><div class="card-poster p4"><span>🌙</span><div class="card-overlay"><div class="play-circle">▶</div></div></div><div class="card-info"><div class="card-title">Шөнийн нүүдэл</div><div class="card-meta"><span class="card-rating">★★★★☆ 7.5</span></div></div></div>
+  </div>
+</div>
+<footer><p style="margin-bottom:8px">🎬 МонголДрама · Бүх эрх хуулиар хамгаалагдсан © 2025</p><p>Зохиогчийн эрхгүй контент · Монголоор субтитртэй</p></footer>
+<div class="modal-bg" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    <h2 id="modal-title"></h2>
+    <div class="modal-meta" id="modal-meta"></div>
+    <div class="modal-desc" id="modal-desc"></div>
+    <div class="modal-btns"><button class="btn-play" style="flex:1">▶ Одоо үзэх</button><button class="btn-save">♡</button></div>
+  </div>
+</div>
+<script>
+function openModal(t,m,d){document.getElementById('modal-title').textContent=t;document.getElementById('modal-meta').textContent=m;document.getElementById('modal-desc').textContent=d;document.getElementById('modal').classList.add('open')}
+function closeModal(e){if(e.target.id==='modal')document.getElementById('modal').classList.remove('open')}
+function closeModalBtn(){document.getElementById('modal').classList.remove('open')}
+function setFilter(b){document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active')}
+</script>
+</body>
+</html>
